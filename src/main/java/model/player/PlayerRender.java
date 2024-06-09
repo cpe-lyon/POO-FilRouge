@@ -23,76 +23,42 @@ public class PlayerRender implements IPlayer, Comparable<IPlayer> {
 	
 	@Override
 	public final String getName() {
-		String ret = null;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return this.player.getName();
 	}
 	
 	@Override
 	public final boolean isStillActive() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return !this.player.isStillActive();
 	}
 
 	@Override
 	public final boolean isTrickWinner() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return this.player.isTrickWinner();
 	}
 	
-
 	@Override
-	public boolean isGameWinner() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+	public final boolean isGameWinner() {
+		return this.player.isGameWinner();
 	}
-
+	
 	@Override
 	public String toString() {
-		String ret = null;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return this.player.getName();
 	}
 
 	@Override
 	public int hashCode() {	
-		int ret = -99999;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return player.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return player.equals(obj);
 	}
 
 	@Override
 	public int compareTo(IPlayer o) {
-		int ret = -99999;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return player.compareTo(o);
 	}
-
 
 }

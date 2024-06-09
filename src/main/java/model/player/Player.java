@@ -32,76 +32,44 @@ public class Player implements IPlayer{
 	}
 	
 	public final void addCardToHand(Card pc) {
-		/*
-		 * TODO Atelier1
-		 */
+		this.hand.addCard(pc);
 	}
 	
 	public final void addCardToTrickPile(Card pc) {
-		/*
-		 * TODO Atelier1
-		 */
+		this.trickPile.addCard(pc);
 	}
 	
 	public final Card playCard(int index) {
-		Card card = null;
-		/*
-		 * TODO Atelier1
-		 */
-		return card;
+		return this.hand.playCard(index);
 	}
 	
 	public final Card removeCardFromHand(int index) {
-		Card card = null;
-		/*
-		 * TODO Atelier1
-		 */
-		return card;
+		return this.hand.removeCard(index);
 	}
 	
 	public final Card removeCardFromTrickPile(int index) {
-		Card card = null;
-		/*
-		 * TODO Atelier1
-		 */
-		return card;
+		return this.trickPile.removeCard(index);
 	}
 	
 	public final boolean revealeCard(int index) {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return this.hand.revealeCard(index);
 	}
 	
 	public final boolean hideCard(int index) {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return this.hand.hideCard(index);
 	}
 	
 	@Override
 	public final String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public final boolean isHandEmpty() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return this.hand.isEmpty();
 	}
 	
 	public final boolean isTrickPileEmpty() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return this.trickPile.isEmpty();
 	}
 	
 	/**
@@ -109,11 +77,7 @@ public class Player implements IPlayer{
 	 */
 	@Override
 	public final boolean isStillActive() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return !this.hand.isEmpty();
 	}
 
 	
@@ -122,40 +86,24 @@ public class Player implements IPlayer{
 	 * du deck initial 
 	 */
 	public final boolean hasWonAllCards(int deckSize) {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return (trickPile.size()+hand.size())==deckSize;
 	}
 	
 	@Override
 	public final boolean isTrickWinner() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return isTrickWinner;
 	}
 
 	public final void setTrickWinner(boolean isTrickWinner) {
-		/*
-		 * TODO Atelier1
-		 */
+		this.isTrickWinner = isTrickWinner;
 	}
 
 	public final boolean isGameWinner() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return isGameWinner;
 	}
 
 	public final void setGameWinner(boolean isGameWinner) {
-		/*
-		 * TODO Atelier1
-		 */
+		this.isGameWinner = isGameWinner;
 	}
 
 	@Override
@@ -163,14 +111,34 @@ public class Player implements IPlayer{
 		return "["+ name + " ** Hand" + hand + " ** trickPile" + trickPile + "]";
 	}
 
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
 	@Override
 	public int compareTo(IPlayer arg0) {
-		int ret = -999999;
-		/*
-		 * TODO Atelier1
-		 */
-		return ret;
+		return this.name.compareTo(arg0.getName());
 	}
 
 	/**
@@ -181,10 +149,19 @@ public class Player implements IPlayer{
 	 *  2 - en utilisant l'Iterator de manière explicite  
 	 */
 	public void addWonCardsBackToHand() {
-
-		/*
-		 * TODO Atelier2
-		 */
+		this.trickPile.shuffle();
+		
+		/* parcours avec itérator implicite */
+		for (Card card : this.trickPile) {
+			this.hand.addCard(card);
+		}
+		
+		/* Parcours avec Iterator explicite */
+//		for (Iterator<Card> it = this.trickPile.iterator();it.hasNext();) {
+//			this.hand.addCard(it.next());
+//		}
+		
+		this.trickPile.clear();
 		  
 	}
 	

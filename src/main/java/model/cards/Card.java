@@ -34,65 +34,56 @@ public class Card implements ICard, Comparable<Card>{
 	
 	@Override
 	public final Suit getSuit() {
-		/*
-		 * TODO Atelier1
-		 */
-		return null;
+		return suit;
 	}
 	
 	@Override
 	public final boolean isRevealed() {
-		/*
-		 * TODO Atelier1
-		 */
-		return false;
+		return isFaceUp == true;
 	}
 	
 	public final void reveale() {
-		/*
-		 * TODO Atelier1
-		 */
+		isFaceUp = true;
 	}
 	
 	public final void hide() {
-		/*
-		 * TODO Atelier1
-		 */
+		isFaceUp = false;
 	}
 	
 	@Override
 	public String toString() {
 		String ret = "?-?"; 
-		/*
-		 * TODO Atelier1
-		 */
+		if (isFaceUp) {
+			ret = rank.getName() + "-" + suit.getName() ;
+//			ret = "[" + rank.getName() + " " + suit.getName() + "]" ;
+		}
 		return ret;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
-//		result = prime * result + ((suit == null) ? 0 : suit.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Card other = (Card) obj;
-//		if (rank != other.rank)
-//			return false;
-//		if (suit != other.suit)
-//			return false;
-//		return true;
-//	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+		result = prime * result + ((suit == null) ? 0 : suit.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Card other = (Card) obj;
+		if (rank != other.rank)
+			return false;
+		if (suit != other.suit)
+			return false;
+		return true;
+	}
 
 	/**
 	 * compare le rang des cartes
@@ -101,9 +92,7 @@ public class Card implements ICard, Comparable<Card>{
 	public int compareTo(Card pc) {
 		int ret = 0;
 		
-		/*
-		 * TODO Atelier1
-		 */
+		ret = this.getRank().getRank() - pc.getRank().getRank();
 	
 		return ret;
 	}

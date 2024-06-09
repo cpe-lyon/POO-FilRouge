@@ -22,65 +22,37 @@ public class CardRender implements ICard, Comparable<CardRender> {
 
 	@Override
 	public final Rank getRank() {
-		Rank ret = null;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.getRank();
 	}
 
 	@Override
 	public final Suit getSuit() {
-		Suit ret = null;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.getSuit();
 	}
 	
 	@Override
 	public final boolean isRevealed() {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.isRevealed();
 	}
 	
 	@Override
 	public int compareTo(CardRender o) {
-		int ret = -99999;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.compareTo(o.card);
 	}
 
 	@Override
 	public int hashCode() {
-		int ret = -99999;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		boolean ret = false;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.equals(obj);
 	}
 
 	@Override
 	public String toString() {
-		String ret = null;
-		/*
-		 * TODO Atelier2
-		 */
-		return ret;
+		return card.toString();
 	}
 }
 

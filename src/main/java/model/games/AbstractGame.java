@@ -65,25 +65,24 @@ public abstract class AbstractGame implements IGame {
 		 */
 		this.deck = deck;
 		
-		/* 
-		 * [Ces lignes ne sont utiles que pour tester les algos avec 
-		 * 4 cartes : à commenter/supprimer après les tests]
-		 */
-		this.initDeckSize = 4;
-		Player player;
-		player = this.players.get(0);
-		player.addCardToHand(new Card(Rank._AS, Suit.CARREAU));
-		player.addCardToHand(new Card(Rank._10, Suit.CARREAU));
-		player = this.players.get(1);
-		player.addCardToHand(new Card(Rank._AS, Suit.COEUR));
-		player.addCardToHand(new Card(Rank._9, Suit.CARREAU));
+//		/* 
+//		 * [Ces lignes ne sont utiles que pour tester les algos avec 
+//		 * 4 cartes : à commenter/supprimer après les tests]
+//		 */
+//		this.initDeckSize = 4;
+//		Player player;
+//		player = this.players.get(0);
+//		player.addCardToHand(new Card(Rank._AS, Suit.CARREAU));
+//		player.addCardToHand(new Card(Rank._10, Suit.CARREAU));
+//		player = this.players.get(1);
+//		player.addCardToHand(new Card(Rank._AS, Suit.COEUR));
+//		player.addCardToHand(new Card(Rank._9, Suit.CARREAU));
 		
 		/* 
-		 * [Ces lignes seront à décommenter après les tests avec 4 cartes]
+		 * [Ces lignes seront à décommenter après le test avec 4 cartes]
 		 */
-//		this.initDeckSize = this.deck.size();
-//		this.dealCardsFromDeck(this.initDeckSize / this.players.size());
-	
+		this.initDeckSize = this.deck.size();
+		this.dealCardsFromDeck(this.initDeckSize / this.players.size());
 	}
 	
 
@@ -103,10 +102,10 @@ public abstract class AbstractGame implements IGame {
 	 * de manière différente en fonction du type de jeu (prévoir une méthode dans classes dérivées donc)
 	 * 
 	 * Chaque joueur joue la carte indiquée
-	 * Elle est stockée dans le gamingMatMap qui sera évalué pour déterminer le gagnant du pli ;
-	 * puis dans le Board qui contient toutes les cartes jouées lors d'un tour de jeu 
-	 * Si "Bataille", nb cartes Board > nb de cartes gamingMatMap.
-	 * 
+		 * Elle est stockée dans le gamingMatMap qui sera évalué pour déterminer le gagnant du pli ;
+		 * puis dans le Board qui contient toutes les cartes jouées lors d'un tour de jeu 
+		 * Si "Bataille", nb cartes Board > nb de cartes gamingMatMap.
+		 * 
 	 * Selon le jeu,le joueur remet les cartes gagnées dans sa Main 
 	 * 
 	 * @param whichCardArePlayed
@@ -115,12 +114,53 @@ public abstract class AbstractGame implements IGame {
 	public final void PlayCards(Map<String, Integer> whichCardArePlayed) {
 
 		/*
-		 * TODO Atelier3
+		 * Choix éventuel des cartes à jouer
 		 */
-		
+		if (whichCardArePlayed == null) {
+			whichCardArePlayed = this.ChooseCardsToPlay();
+		}
+
+		this.gamingMatMap.clear();
+
+		/*
+		 * Chaque joueur joue la carte indiquée
+		 * Elle est stockée dans le gamingMatMap qui sera évalué
+		 * pour déterminer le gagnant du pli ;
+		 * puis dans le Board qui contient toutes les cartes jouées
+		 * lors d'un tour de jeu 
+		 * Si "Bataille", nb cartes Board > nb de cartes gamingMatMap.
+		 */
+		for(Player player : this.players) {
+			player.setTrickWinner(false);
+
+			/* 
+			 * Selon le jeu, 
+			 * joueur remet les cartes gagnées dans sa Main 
+			 */
+			this.organizePlayerHand(player);
+
+			if (player.isStillActive() ) {
+				int cardIndex = whichCardArePlayed.get(player.getName());
+				Card playerCard = player.playCard(cardIndex);
+				this.gamingMatMap.put(player, playerCard);
+				this.board.addCard(playerCard);
+			}
+		}
+
 	}
 
+	/*
+	 * La méthode de choix des cartes à jouer pour un pli est différente selon le type de jeu
+	 */
+	protected abstract Map<String, Integer> ChooseCardsToPlay() ;
+
+	/*
+	 * La méthode d'organisation de la main du joueur est différente selon le type de jeu
+	 */
+	protected abstract void organizePlayerHand(Player player);
+
 	
+
 	/**
 	 * Evaluation d'un pli à l'aide d'un évaluateur (IGameEvaluator) spécifique à chaque jeu
 	 * Au delà de simplement retourner si le pli a été gagné, 
@@ -136,10 +176,30 @@ public abstract class AbstractGame implements IGame {
 		boolean isTrickWon = false;
 		Player trickWinnerPlayer = null;
 		
-		/*
-		 * TODO Atelier3
-		 */
+		ICardsCollection boardToEvaluate = new Board(this.gamingMatMap.values());
 		
+		/*
+		 * Le jeu délègue à un IGameEvaluator le soin d'évaluer le pli (Design Pattern Strategy)
+		 * Utilisation d'un Factory Method (Design Pattern) pour créer l'évaluateur
+		 * Est-ce une bonne pratique dans ce contexte ?  
+		 */
+		IGameEvaluator evaluator = this.getGameEvaluator();
+		Card trickWinnerCard = evaluator.evaluateTrickWinner(boardToEvaluate);
+
+		/*
+		 * tag du Player qui gagne le pli
+		 */
+		if(trickWinnerCard!=null) {
+
+			for (Entry<Player, Card> entry : this.gamingMatMap.entrySet()) {
+				if (entry.getValue().equals(trickWinnerCard)) {
+					trickWinnerPlayer = entry.getKey();
+					trickWinnerPlayer.setTrickWinner(true);
+					isTrickWon = true;
+					break;
+				}
+			}
+		}
 		return isTrickWon;
 	}
 
@@ -148,7 +208,7 @@ public abstract class AbstractGame implements IGame {
 	 * Elle est confiée à un IGameEvaluator
 	 */
 	protected abstract IGameEvaluator getGameEvaluator() ;
-	
+
 
 	/**
 	 * Constitution de la Map visible par la ou les Views à partir de gamingMatMap
@@ -159,10 +219,13 @@ public abstract class AbstractGame implements IGame {
 	public final Map<IPlayer, ICard> getGamingMatRender() {
 		Map<IPlayer, ICard> gamingMatMapRender = new TreeMap<IPlayer, ICard>();
 
-		/*
-		 * TODO Atelier3
-		 */
-		 
+		for (Entry<Player, Card> entry : this.gamingMatMap.entrySet()) {
+
+			Player player = entry.getKey();	
+			PlayerRender playerRender = new PlayerRender(player);
+			CardRender cardRender = new CardRender(entry.getValue());
+			gamingMatMapRender.put(playerRender, cardRender);
+		}
 		return gamingMatMapRender;
 	}
 
@@ -174,12 +237,17 @@ public abstract class AbstractGame implements IGame {
 	@Override
 	public final void theWinnerTakesItAll() {
 
-		/*
-		 * TODO Atelier3
-		 */
+		for (Player trickWinnerPlayer : this.players) {
+			if (trickWinnerPlayer.isTrickWinner()) {
+				for(Card card : this.board) {
+					trickWinnerPlayer.addCardToTrickPile(card);
+				}
+				break;	
+			}
+		}
+		this.board.clear(); 
 
 	}
-
 
 
 	/**
@@ -198,11 +266,11 @@ public abstract class AbstractGame implements IGame {
 	@Override
 	public final PlayerRender theWinnerIs() {
 		PlayerRender winnerPlayer = null;
-
-		/*
-		 * TODO Atelier3
-		 */
-
+		for (Player player : this.players) {
+			if (player.isGameWinner()) {
+				winnerPlayer = new PlayerRender(player) ;
+			}
+		}
 		return winnerPlayer;
 	}
 

@@ -19,7 +19,7 @@ import model.player.Player;
  *   <li> les cartes sont distribuées 1 par 1 alternativement à chaque joueur
  *   <li> un joueur joue toujours la carte au sommet de sa main (il la retourne et la joue) 	
  * </ul>
- * 
+ 	* 
  * Il existe 2 classes dérivées qui utilisent des évaluateurs de plis différents 
  * 
  * @author francoise.perrin
@@ -41,11 +41,37 @@ public abstract class AbstractWarGame extends AbstractGame implements IGame {
 	 */
 	protected final void dealCardsFromDeck(int nbCards) {
 	
-		/*
-		 * TODO Atelier3
-		 */
+			this.deck.shuffle();
+			
+			for (int i=0; i < nbCards ; i++) {
+				for (Player player : this.players) {
+					player.addCardToHand(this.deck.removeTopCard());
+				}	
+			}
+		}
+
+	/*
+	 * Spécifique à chaque jeu
+	 * A la bataille, le joueur prend toujours sa 1ère carte   
+	 */
+	protected final Map<String, Integer> ChooseCardsToPlay() {
+		Map<String, Integer> whichCardArePlayed = new TreeMap<String, Integer>();
+
+		for(Player player : this.players) {
+			whichCardArePlayed.put(player.getName(), 0);
+		}
+		return whichCardArePlayed;
 	}
 
+	/*
+	 * La méthode d'organisation de la main du joueur est différente selon le type de jeu
+	 * Ici, Une fois que la main du joueur est vide, il reprend les cartes qu'il a gagnées
+	 */
+	protected final void organizePlayerHand(Player player) {
+		if (player.isHandEmpty() && !player.isTrickPileEmpty()) {
+			player.addWonCardsBackToHand();
+		}
+	}
 	
 	/*
 	 * La méthode de test de la fin du jeu est différente selon le type de jeu
@@ -56,10 +82,14 @@ public abstract class AbstractWarGame extends AbstractGame implements IGame {
 	@Override
 	public final boolean isGameEnd() {
 		boolean isGameEnd = false;
-		
-		/*
-		 * TODO Atelier3
-		 */
+
+		for (Player player : this.players) {
+			if (player.hasWonAllCards(this.initDeckSize)) {
+				player.setGameWinner(true);
+				isGameEnd = true;
+				break;
+			}
+		}
 		return isGameEnd;
 	}
 
