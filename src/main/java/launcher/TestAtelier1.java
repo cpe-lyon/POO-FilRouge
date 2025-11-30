@@ -47,8 +47,8 @@ public class TestAtelier1 {
 		
 		/* Test différence Objet et Référence */
 		c2.reveale();
-		System.out.println("c2 après reveale() : " + c2);	// c2 : ?-?  
-		c2Bis.hide();
+        System.out.println("c2 après reveale() : " + c2);	// c2 : Roi-Carreau
+        c2Bis.hide();
 		System.out.println("c2 après hide invoqué depuis c2Bis : " + c2);	// c2 : ?-? 
 		
 		
