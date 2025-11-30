@@ -39,7 +39,7 @@ public class CardRender implements ICard, Comparable<CardRender> {
 	public int compareTo(CardRender o) {
 		return card.compareTo(o.card);
 	}
-
+// regénérer equals et hashcode avec IDE
 	@Override
 	public int hashCode() {
 		return card.hashCode();

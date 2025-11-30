@@ -241,12 +241,13 @@ public class TestAtelier2 {
 		
 		/* Test CardRender */
 		ICard cardRender = new CardRender(c2); /* un objet CardRender enveloppe un objet Card */
+		ICard cardRender2 = new CardRender(c2); /* un objet CardRender enveloppe un objet Card */
 		System.out.println("c2 : " + c2);	// c2 : Roi-Carreau
 		System.out.println("cardRender : " + cardRender);	// cardRender : Roi-Carreau
 		System.out.println("cardRender.getRank() : " + cardRender.getRank());	// cardRender.getRank() : _ROI
 		System.out.println("cardRender.getSuit() : " + cardRender.getSuit());	// cardRender.getSuit() : CARREAU
 		System.out.println("cardRender.isRevealed() : " + cardRender.isRevealed());	// cardRender.isRevealed() : true
-
+		System.out.println("cardRender.compareto() : " + ((Comparable) cardRender).compareTo(cardRender2));	// cardRender.isRevealed() : true
 		
 		/* Décommentez la ligne suivante et constatez que vous ne pouvez invoquer que des
 		 * méthodes définies dans ICard et non pas dans Card sur cet objet CardRender
