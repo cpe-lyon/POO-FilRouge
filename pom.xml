@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fr.cpe.cpe2324</groupId>
-  <artifactId>irc3filrouge</artifactId>
+  <artifactId>POO-FilRouge</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>irc3filrouge</name>
@@ -19,8 +19,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.25</maven.compiler.source>
+    <maven.compiler.target>1.25</maven.compiler.target>
   </properties>
 
   <dependencies>
